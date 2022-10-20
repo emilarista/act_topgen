@@ -10,11 +10,9 @@
   delegate_to: localhost
   run_once: true
 
-- name: Include device intended structure configuration variables
+- name: Include device structured configuration variables
   include_vars: "{{ filename }}"
   delegate_to: localhost
-  # errors='ignore' is needed for compatibility with ansible-core < 2.12
-  # when: structured_config is not defined and lookup('first_found', filename, skip=True, errors='ignore')
   vars:
     filename: "{{ structured_folder }}/{{ inventory_hostname }}.{{ avd_structured_config_file_format }}"
   tags:

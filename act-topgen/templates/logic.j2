@@ -1,0 +1,36 @@
+{# Build nodes_data.nodes_list #}
+{% set nodes_list = [] %}
+{% for node in groups[fabric_name] | arista.avd.natural_sort %}
+{%     if hostvars[node].ethernet_interfaces is defined %}
+{%         set node_dict = dict() %}
+{%         do node_dict.update({node: dict()}) %}
+{%         do node_dict[node].update({"ip_addr": "192.168.0.1" ~ loop.index}) %}
+{%         do node_dict[node].update({"node_type": "veos"}) %}
+{%         do node_dict[node].update({"neighbors": []}) %}
+{%         for interface, ifdata in hostvars[node].ethernet_interfaces.items() %}
+{%             if "peer" in ifdata and "peer_interface" in ifdata %}
+{%                 if ifdata["peer"] in groups[fabric_name] %}
+{%                     set neighbordict = dict() %}
+{%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
+{%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
+{%                     do neighbordict.update({"port": interface}) %}
+{%                     do node_dict[node]["neighbors"].append(neighbordict) %}
+{%                 endif %}
+{%             endif %}
+{%         endfor %}
+{%         do nodes_list.append(node_dict) %}
+{%     endif %}
+{% endfor %}
+{% if act_add_cvp %}
+{%     do nodes_list.append({"cvp": {"ip_addr": "192.168.0.5", "node_type": "cvp"}}) %}
+{% endif %}
+{% if act_add_ansible_node %}
+{%     do nodes_list.append({"ansible": {"ip_addr": "192.168.0.6", "node_type": "generic"}}) %}
+{% endif %}
+{% set nodes_data.nodes = {"nodes": nodes_list} %}
+{# Build nodes_data.node_defaults #}
+{% set node_defaults = dict() %}
+{% do node_defaults.update({"veos": {"username": act_device_user, "password": act_device_password, "version": act_eos_version}}) %}
+{% do node_defaults.update({"cvp": {"username": act_cvp_user, "password": act_cvp_password, "instance": act_cvp_instance_type, "version": act_cvp_version}}) %}
+{% do node_defaults.update({"generic": {"username": act_device_user, "password": act_device_password, "version": act_generic_os_version}}) %}
+{% set nodes_data.node_defaults = node_defaults %}

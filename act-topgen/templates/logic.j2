@@ -7,14 +7,33 @@
 {%         do node_dict[node].update({"ip_addr": "192.168.0.1" ~ loop.index}) %}
 {%         do node_dict[node].update({"node_type": "veos"}) %}
 {%         do node_dict[node].update({"neighbors": []}) %}
+{%         do node_dict[node].update({"ports": []}) %}
 {%         for interface, ifdata in hostvars[node].ethernet_interfaces.items() %}
 {%             if "peer" in ifdata and "peer_interface" in ifdata %}
+{#                 add fabric connected nodes #}
 {%                 if ifdata["peer"] in groups[fabric_name] %}
 {%                     set neighbordict = dict() %}
 {%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": interface}) %}
 {%                     do node_dict[node]["neighbors"].append(neighbordict) %}
+{#                 add non-fabric connected nodes if toggle is set #}
+{%                 elif act_add_connected_nodes == true %}
+{%                     set peer_node = ifdata["peer"] %}
+{%                     set avd_ext_node_dict = dict() %}
+{%                     do avd_ext_node_dict.update({peer_node: dict()}) %}
+{%                     do avd_ext_node_dict[peer_node].update({"ip_addr": "192.168.1.1" ~ loop.index}) %}
+{%                     do avd_ext_node_dict[peer_node].update({"node_type": "generic"}) %}
+{%                     do avd_ext_node_dict[peer_node].update({"neighbors": []}) %}
+{%                     do avd_ext_node_dict[peer_node].update({"ports": []}) %}
+{%                     set avd_ext_node_neighbordict = dict() %}
+{%                     do avd_ext_node_neighbordict.update({"neighborDevice": node}) %}
+{%                     do avd_ext_node_neighbordict.update({"neighborPort": interface}) %}
+{%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
+{%                     do avd_ext_node_dict[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
+{%                     do nodes_list.append(avd_ext_node_dict) %}
+{%                 elif act_add_connected_nodes == false %}
+{%                     do node_dict[node].ports.append(interface) %}
 {%                 endif %}
 {%             endif %}
 {%         endfor %}

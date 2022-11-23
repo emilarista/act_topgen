@@ -1,6 +1,6 @@
 {# Build nodes_data.nodes_list #}
 {% set nodes_list = [] %}
-{% for node in groups[fabric_name] | arista.avd.natural_sort %}
+{% for node in ansible_play_hosts_all | arista.avd.natural_sort %}
 {%     if hostvars[node].ethernet_interfaces is defined %}
 {%         set node_dict = dict() %}
 {%         do node_dict.update({node: dict()}) %}
@@ -11,7 +11,7 @@
 {%         for interface, ifdata in hostvars[node].ethernet_interfaces.items() %}
 {%             if "peer" in ifdata and "peer_interface" in ifdata %}
 {#                 add fabric connected nodes #}
-{%                 if ifdata["peer"] in groups[fabric_name] %}
+{%                 if ifdata["peer"] in ansible_play_hosts_all %}
 {%                     set neighbordict = dict() %}
 {%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}

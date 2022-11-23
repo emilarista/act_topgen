@@ -4,7 +4,14 @@
 {%     if hostvars[node].ethernet_interfaces is defined %}
 {%         set node_dict = dict() %}
 {%         do node_dict.update({node: dict()}) %}
-{%         do node_dict[node].update({"ip_addr": "192.168.0.1" ~ loop.index}) %}
+{# {%         do node_dict[node].update({"ip_addr": "192.168.0.1" ~ loop.index}) %} #}
+{%         if hostvars[node].management_interfaces is defined %}
+{%             for mgmt_if in hostvars[node].management_interfaces %}
+{%                 set node_mgmt_ip = hostvars[node].management_interfaces[mgmt_if].ip_address | split("/") %}
+{%                 do node_dict[node].update({"ip_addr": node_mgmt_ip[0]}) %}
+{%                 break %}
+{%             endfor %}
+{%         endif %}
 {%         do node_dict[node].update({"node_type": "veos"}) %}
 {%         do node_dict[node].update({"neighbors": []}) %}
 {%         do node_dict[node].update({"ports": []}) %}

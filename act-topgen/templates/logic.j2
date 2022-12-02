@@ -44,9 +44,9 @@
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": interface}) %}
 {%                     do node_dict[node]["neighbors"].append(neighbordict) %}
-{%                 elif act_add_connected_nodes == false %}
-{%                     do node_dict[node].ports.append(interface) %}
 {%                 endif %}
+{%             elif act_add_connected_nodes == false %}
+{%                 do node_dict[node].ports.append(interface) %}
 {%             endif %}
 {%         endfor %}
 {%         do nodes_list.append(node_dict) %}

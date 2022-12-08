@@ -18,7 +18,7 @@ act_device_password: "arista1234"
 # CVP user/pass
 act_cvp_user: "root"
 act_cvp_password: "cvproot"
-act_cvp_instance_type: "singlenode" # Currently the only supported type
+act_cvp_instance_type: "singlenode"  # Currently the only supported type
 
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true
@@ -31,10 +31,11 @@ act_add_connected_nodes: false
 # the ACT node_type needs to be defined
 # Any peer_type that is not defined in this list
 # will not be added as a node in the topology
-act_connected_nodes_map: 
+act_connected_nodes_map:
   other: 'veos'
+  server: 'generic'
   # network_port: 'generic'
-  # server: 'generic'
+  # <peer_type in AVD>: <node_type in ACT>
 
 # # Extra nodes to add
 # act_additional_nodes: []

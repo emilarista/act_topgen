@@ -50,7 +50,7 @@
 {%                 else %}
 {%                     do node_dict[node].ports.append(interface) %}
 {%                 endif %}
-{%             elif act_add_connected_nodes == false and "." not in interface %}
+{%             elif "." not in interface %}
 {%                 do node_dict[node].ports.append(interface) %}
 {%             endif %}
 {%         endfor %}

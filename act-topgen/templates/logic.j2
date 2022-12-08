@@ -1,6 +1,6 @@
 {# Build nodes_data.nodes_list #}
 {% set nodes_list = [] %}
-{% set other_nodes = {} %}
+{% set avd_ext_nodes = {} %}
 {% for node in ansible_play_hosts_all | arista.avd.natural_sort %}
 {%     if hostvars[node].ethernet_interfaces is defined %}
 {%         set node_dict = dict() %}
@@ -32,15 +32,15 @@
 {%                     do avd_ext_node_neighbordict.update({"neighborDevice": node}) %}
 {%                     do avd_ext_node_neighbordict.update({"neighborPort": interface}) %}
 {%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
-{%                     if peer_node not in other_nodes %}
-{%                         do other_nodes.update({peer_node: dict()}) %}
-{%                         do other_nodes[peer_node].update({"ip_addr": "192.168.1.1" ~ loop.index}) %}
-{%                         do other_nodes[peer_node].update({"node_type": act_connected_nodes_map[ifdata["peer_type"]]}) %}
-{%                         do other_nodes[peer_node].update({"neighbors": []}) %}
-{%                         do other_nodes[peer_node].update({"ports": []}) %}
-{%                         do other_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
+{%                     if peer_node not in avd_ext_nodes %}
+{%                         do avd_ext_nodes.update({peer_node: dict()}) %}
+{%                         do avd_ext_nodes[peer_node].update({"ip_addr": "192.168.1.1" ~ loop.index}) %}
+{%                         do avd_ext_nodes[peer_node].update({"node_type": act_connected_nodes_map[ifdata["peer_type"]]}) %}
+{%                         do avd_ext_nodes[peer_node].update({"neighbors": []}) %}
+{%                         do avd_ext_nodes[peer_node].update({"ports": []}) %}
+{%                         do avd_ext_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
 {%                     else %}
-{%                         do other_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict)%}
+{%                         do avd_ext_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
 {%                     endif %}
 {%                     set neighbordict = dict() %}
 {%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
@@ -58,8 +58,8 @@
 {%     endif %}
 {% endfor %}
 {# Add the other nodes to the list #}
-{% for node in other_nodes %}
-{%   do nodes_list.append({node: other_nodes[node]})%}
+{% for node in avd_ext_nodes %}
+{%    do nodes_list.append({node: avd_ext_nodes[node]})%}
 {% endfor %}
 {% if act_add_cvp %}
 {%     do nodes_list.append({ "cvp": {"ip_addr": "192.168.0.5", "node_type": "cvp"}}) %}

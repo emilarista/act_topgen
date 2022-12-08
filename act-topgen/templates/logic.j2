@@ -17,7 +17,7 @@
 {%         do node_dict[node].update({"neighbors": []}) %}
 {%         do node_dict[node].update({"ports": []}) %}
 {%         for interface, ifdata in hostvars[node].ethernet_interfaces.items() %}
-{%             if "peer" in ifdata and "peer_interface" in ifdata %}
+{%             if "peer" in ifdata and "peer_interface" in ifdata and "." not in interface %}
 {#                 add fabric connected nodes #}
 {%                 if ifdata["peer"] in ansible_play_hosts_all %}
 {%                     set neighbordict = dict() %}
@@ -50,7 +50,7 @@
 {%                 else %}
 {%                     do node_dict[node].ports.append(interface) %}
 {%                 endif %}
-{%             elif act_add_connected_nodes == false %}
+{%             elif act_add_connected_nodes == false and "." not in interface %}
 {%                 do node_dict[node].ports.append(interface) %}
 {%             endif %}
 {%         endfor %}
@@ -62,10 +62,10 @@
 {%    do nodes_list.append({node: avd_ext_nodes[node]})%}
 {% endfor %}
 {% if act_add_cvp %}
-{%     do nodes_list.append({ "cvp": {"ip_addr": "192.168.0.5", "node_type": "cvp"}}) %}
+{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp"}}) %}
 {% endif %}
 {% if act_add_ansible_node %}
-{%     do nodes_list.append({"ansible": {"ip_addr": "192.168.0.6", "node_type": "generic"}}) %}
+{%     do nodes_list.append({"ansible": {"ip_addr": act_ansible_ip, "node_type": "generic"}}) %}
 {% endif %}
 {% set nodes_data.nodes = {"nodes": nodes_list} %}
 {# Build nodes_data.node_defaults #}

@@ -44,6 +44,8 @@ act_device_password: "arista1234"
 act_cvp_user: "root"
 act_cvp_password: "cvproot"
 act_cvp_instance_type: "singlenode" # Currently the only supported type
+act_cvp_ip: < cvp node IP, default -> 192.168.0.5 >
+act_ansible_ip: < cvp node IP, default -> 192.168.0.6 >
 
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true

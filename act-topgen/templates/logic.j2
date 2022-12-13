@@ -1,6 +1,7 @@
 {# Build nodes_data.nodes_list #}
 {% set nodes_list = [] %}
 {% set avd_ext_nodes = {} %}
+{% set ns = namespace(avd_ext_nodes_count = 0) %}
 {% for node in ansible_play_hosts_all | arista.avd.natural_sort %}
 {%     if hostvars[node].ethernet_interfaces is defined %}
 {%         set node_dict = dict() %}
@@ -34,7 +35,9 @@
 {%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
 {%                     if peer_node not in avd_ext_nodes %}
 {%                         do avd_ext_nodes.update({peer_node: dict()}) %}
-{%                         do avd_ext_nodes[peer_node].update({"ip_addr": "192.168.1.1" ~ loop.index}) %}
+{%                         set mgmt_ip = act_connected_nodes_range | ansible.utils.ipaddr('network') | ansible.utils.ipmath(ns.avd_ext_nodes_count)  %}
+{%                         set ns.avd_ext_nodes_count = ns.avd_ext_nodes_count + 1 %}
+{%                         do avd_ext_nodes[peer_node].update({"ip_addr": mgmt_ip}) %}
 {%                         do avd_ext_nodes[peer_node].update({"node_type": act_connected_nodes_map[ifdata["peer_type"]]}) %}
 {%                         do avd_ext_nodes[peer_node].update({"neighbors": []}) %}
 {%                         do avd_ext_nodes[peer_node].update({"ports": []}) %}

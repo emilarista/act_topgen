@@ -1,5 +1,7 @@
 {# Build nodes_data.nodes_list #}
 {% set nodes_list = [] %}
+{% set avd_ext_nodes = {} %}
+{% set ns = namespace(avd_ext_nodes_count = 0) %}
 {% for node in ansible_play_hosts_all | arista.avd.natural_sort %}
 {%     if hostvars[node].ethernet_interfaces is defined %}
 {%         set node_dict = dict() %}
@@ -24,33 +26,43 @@
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": interface}) %}
 {%                     do node_dict[node]["neighbors"].append(neighbordict) %}
-{#                 add non-fabric connected nodes if toggle is set #}
-{%                 elif act_add_connected_nodes == true %}
+{#                 add non-fabric connected nodes if toggle is set and peer_type is within given map #}
+{%                 elif act_add_connected_nodes == true and ifdata["peer_type"] in act_connected_nodes_map %}
 {%                     set peer_node = ifdata["peer"] %}
-{%                     set avd_ext_node_dict = dict() %}
-{%                     do avd_ext_node_dict.update({peer_node: dict()}) %}
-{%                     do avd_ext_node_dict[peer_node].update({"ip_addr": "192.168.1.1" ~ loop.index}) %}
-{%                     do avd_ext_node_dict[peer_node].update({"node_type": "generic"}) %}
-{%                     do avd_ext_node_dict[peer_node].update({"neighbors": []}) %}
-{%                     do avd_ext_node_dict[peer_node].update({"ports": []}) %}
 {%                     set avd_ext_node_neighbordict = dict() %}
 {%                     do avd_ext_node_neighbordict.update({"neighborDevice": node}) %}
 {%                     do avd_ext_node_neighbordict.update({"neighborPort": interface}) %}
 {%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
-{%                     do avd_ext_node_dict[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
-{%                     do nodes_list.append(avd_ext_node_dict) %}
+{%                     if peer_node not in avd_ext_nodes %}
+{%                         do avd_ext_nodes.update({peer_node: dict()}) %}
+{%                         set mgmt_ip = act_connected_nodes_range | ansible.utils.ipaddr('network') | ansible.utils.ipmath(ns.avd_ext_nodes_count)  %}
+{%                         set ns.avd_ext_nodes_count = ns.avd_ext_nodes_count + 1 %}
+{%                         do avd_ext_nodes[peer_node].update({"ip_addr": mgmt_ip}) %}
+{%                         do avd_ext_nodes[peer_node].update({"node_type": act_connected_nodes_map[ifdata["peer_type"]]}) %}
+{%                         do avd_ext_nodes[peer_node].update({"neighbors": []}) %}
+{%                         do avd_ext_nodes[peer_node].update({"ports": []}) %}
+{%                         do avd_ext_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
+{%                     else %}
+{%                         do avd_ext_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
+{%                     endif %}
 {%                     set neighbordict = dict() %}
 {%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": interface}) %}
 {%                     do node_dict[node]["neighbors"].append(neighbordict) %}
+{%                 else %}
+{%                     do node_dict[node].ports.append(interface) %}
 {%                 endif %}
-{%             elif act_add_connected_nodes == false and "." not in interface %}
+{%             elif "." not in interface %}
 {%                 do node_dict[node].ports.append(interface) %}
 {%             endif %}
 {%         endfor %}
 {%         do nodes_list.append(node_dict) %}
 {%     endif %}
+{% endfor %}
+{# Add the other nodes to the list #}
+{% for node in avd_ext_nodes %}
+{%    do nodes_list.append({node: avd_ext_nodes[node]})%}
 {% endfor %}
 {% if act_add_cvp %}
 {%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp"}}) %}

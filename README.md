@@ -50,4 +50,20 @@ act_ansible_ip: < cvp node IP, default -> 192.168.0.6 >
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true
 act_add_ansible_node: true
+
+# Whether to add nodes that are not defined in the fabric
+# Example l3 peers, servers and other endpoints
+act_add_connected_nodes: false
+# For each peer_type that should be added,
+# the ACT node_type needs to be defined
+# Any peer_type that is not defined in this list
+# will not be added as a node in the topology
+act_connected_nodes_map:
+  other: 'veos'
+  # server: 'generic'
+  # network_port: 'generic'
+  # <peer_type in AVD>: <node_type in ACT>
+
+# Range for assigning OOB IP addresses to connected nodes.
+act_connected_nodes_range: 192.168.0.128/25
 ```

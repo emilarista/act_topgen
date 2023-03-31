@@ -7,17 +7,34 @@
 {%         set node_dict = dict() %}
 {%         do node_dict.update({node: dict()}) %}
 {# {%         do node_dict[node].update({"ip_addr": "192.168.0.1" ~ loop.index}) %} #}
-{%         if hostvars[node].management_interfaces is defined %}
-{%             for mgmt_if in hostvars[node].management_interfaces %}
-{%                 set node_mgmt_ip = mgmt_if.ip_address | split("/") %}
-{%                 do node_dict[node].update({"ip_addr": node_mgmt_ip[0]}) %}
-{%                 break %}
+{%         set node_mgmt_interfaces = [] %}
+{%         if hostvars[node].management_interfaces is defined and hostvars[node].management_interfaces is mapping %}
+{%             for ifname, ifdata in hostvars[node].management_interfaces.items() %}
+{%                 do ifdata.update({"name": ifname}) %}
+{%                 do node_mgmt_interfaces.append(ifdata) %}
 {%             endfor %}
+{%         elif hostvars[node].management_interfaces is defined %}
+{%             set node_mgmt_interfaces = hostvars[node].management_interfaces %}
 {%         endif %}
+{%         for mgmt_if in node_mgmt_interfaces %}
+{%             set node_mgmt_ip = mgmt_if.ip_address | split("/") %}
+{%             do node_dict[node].update({"ip_addr": node_mgmt_ip[0]}) %}
+{%             break %}
+{%         endfor %}
 {%         do node_dict[node].update({"node_type": "veos"}) %}
 {%         do node_dict[node].update({"neighbors": []}) %}
 {%         do node_dict[node].update({"ports": []}) %}
-{%         for ifdata in hostvars[node].ethernet_interfaces %}
+{%         set node_ethernet_interfaces = [] %}
+{#         version 3 of avd uses dict of dicts for interfaces #}
+{%         if hostvars[node].ethernet_interfaces is defined and hostvars[node].ethernet_interfaces is mapping %}
+{%             for ifname, ifdata in hostvars[node].ethernet_interfaces.items() %}
+{%                 do ifdata.update({"name": ifname}) %}
+{%                 do node_ethernet_interfaces.append(ifdata) %}
+{%             endfor %}
+{%         else %}
+{%             set node_ethernet_interfaces = hostvars[node].ethernet_interfaces %}
+{%         endif %}
+{%         for ifdata in node_ethernet_interfaces %}
 {%             if "peer" in ifdata and "peer_interface" in ifdata and "." not in ifdata.name %}
 {#                 add fabric connected nodes #}
 {%                 if ifdata["peer"] in ansible_play_hosts_all %}

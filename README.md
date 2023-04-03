@@ -32,9 +32,9 @@ avd_structured_config_file_format: yml
 output_folder: "act/"
 
 # Versions
-act_eos_version: "4.27.6M"
+act_eos_version: "4.28.1.1F"
 act_generic_os_version: "Rocky-8.5"
-act_cvp_version: "2022.2.0"
+act_cvp_version: "2022.2.2"
 
 # Device (veos/generic) user/pass
 act_device_user: "cvpadmin"

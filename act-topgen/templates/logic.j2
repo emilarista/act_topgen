@@ -79,10 +79,10 @@
 {% endfor %}
 {# Add the other nodes to the list #}
 {% for node in avd_ext_nodes %}
-{%    do nodes_list.append({node: avd_ext_nodes[node]})%}
+{%     do nodes_list.append({ node: avd_ext_nodes[node] }) %}
 {% endfor %}
 {% if act_add_cvp %}
-{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp"}}) %}
+{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration }}) %}
 {% endif %}
 {% if act_add_ansible_node %}
 {%     do nodes_list.append({"ansible": {"ip_addr": act_ansible_ip, "node_type": "generic"}}) %}
@@ -91,6 +91,6 @@
 {# Build nodes_data.node_defaults #}
 {% set node_defaults = dict() %}
 {% do node_defaults.update({"veos": {"username": act_device_user, "password": act_device_password, "version": act_eos_version}}) %}
-{% do node_defaults.update({"cvp": {"username": act_cvp_user, "password": act_cvp_password, "instance": act_cvp_instance_type, "version": act_cvp_version, "auto_configuration": act_cvp_auto_configuration}}) %}
+{% do node_defaults.update({"cvp": {"username": act_cvp_user, "password": act_cvp_password, "instance": act_cvp_instance_type, "version": act_cvp_version}}) %}
 {% do node_defaults.update({"generic": {"username": act_device_user, "password": act_device_password, "version": act_generic_os_version}}) %}
 {% set nodes_data.node_defaults = node_defaults %}

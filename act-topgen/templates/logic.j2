@@ -82,7 +82,7 @@
 {%     do nodes_list.append({ node: avd_ext_nodes[node] }) %}
 {% endfor %}
 {% if act_add_cvp %}
-{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration }}) %}
+{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration, "username":act_device_user, "password":act_device_password }}) %}
 {% endif %}
 {% if act_add_ansible_node %}
 {%     do nodes_list.append({"ansible": {"ip_addr": act_ansible_ip, "node_type": "generic"}}) %}

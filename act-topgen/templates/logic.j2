@@ -1,6 +1,8 @@
 {# Build nodes_data.nodes_list #}
 {% set nodes_list = [] %}
 {% set avd_ext_nodes = {} %}
+{% set unique_links = {} %}
+{% set act_links = [] %}
 {% set ns = namespace(avd_ext_nodes_count = 0) %}
 {% for node in ansible_play_hosts_all | arista.avd.natural_sort %}
 {%     if hostvars[node].ethernet_interfaces is defined %}
@@ -34,6 +36,27 @@
 {%         else %}
 {%             set node_ethernet_interfaces = hostvars[node].ethernet_interfaces %}
 {%         endif %}
+{%         for ifdata in node_ethernet_interfaces %}
+{%             if "peer" in ifdata and "peer_interface" in ifdata and "." not in ifdata.name %}
+{%                 if ifdata.peer in ansible_play_hosts_all %}
+{%                     set link_nodes = [ifdata.peer, node] | sort | join("_") %}
+{%                     set link_ifs = [ifdata.name, ifdata.peer_interface] | sort | join("_") %}
+{%                     if link_nodes not in unique_links %}
+{%                         do unique_links.update({link_nodes: [link_ifs]}) %}
+{%                     elif link_ifs not in unique_links[link_nodes] %}
+{%                         do unique_links[link_nodes].append(link_ifs) %}
+{%                     endif %}
+{%                 endif %}
+{%             endif %}
+{%         endfor %}
+{%         for nodepair, links in unique_links.items() %}
+{%             for ifpair in links %}
+{%                 set nodes = nodepair | split("_") %}
+{%                 set interfaces = ifpair | split("_") %}
+{%                 set connection = [ nodes[0] ~ ":" ~ interfaces[0], nodes[1] ~ ":" ~ interfaces[1] ] %}
+{%                 do act_links.append({"connection": connection}) %}
+{%             endfor %}
+{%         endfor %}
 {%         for ifdata in node_ethernet_interfaces %}
 {%             if "peer" in ifdata and "peer_interface" in ifdata and "." not in ifdata.name %}
 {#                 add fabric connected nodes #}
@@ -96,3 +119,4 @@
 {% do node_defaults.update({"cvp": {"username": act_cvp_user, "password": act_cvp_password, "instance": act_cvp_instance_type, "version": act_cvp_version}}) %}
 {% do node_defaults.update({"generic": {"username": act_device_user, "password": act_device_password, "version": act_generic_os_version}}) %}
 {% set nodes_data.node_defaults = node_defaults %}
+{% set nodes_data.act_links = {"links": act_links} %}

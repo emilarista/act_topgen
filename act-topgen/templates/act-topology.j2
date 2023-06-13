@@ -8,3 +8,4 @@
 
 {{ nodes_data.node_defaults | to_nice_yaml(indent=2, width=1337) }}
 {{ nodes_data.nodes | to_nice_yaml(indent=2, width=1337) | indent(2) }}
+{{ nodes_data.act_links | to_nice_yaml(indent=2, width=1337) | indent(2) }}

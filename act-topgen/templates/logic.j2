@@ -87,7 +87,7 @@
 {#                 add fabric connected nodes #}
 {%                 if ifdata["peer"] in ansible_play_hosts_all and act_use_old_connections %}
 {%                     set neighbordict = dict() %}
-{%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
+{%                     do neighbordict.update({"neighborDevice": ifdata["peer"] | replace("_", "-")}) %}
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": ifdata.name}) %}
 {%                     do node_dict[nodename]["neighbors"].append(neighbordict) %}
@@ -95,7 +95,7 @@
 {%                 elif act_add_connected_nodes == true and ifdata["peer_type"] in act_connected_nodes_map and act_use_old_connections %}
 {%                     set peer_node = ifdata["peer"] | replace("_", "-") %}
 {%                     set avd_ext_node_neighbordict = dict() %}
-{%                     do avd_ext_node_neighbordict.update({"neighborDevice": node}) %}
+{%                     do avd_ext_node_neighbordict.update({"neighborDevice": nodename}) %}
 {%                     do avd_ext_node_neighbordict.update({"neighborPort": ifdata.name}) %}
 {%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
 {%                     if peer_node not in avd_ext_nodes %}
@@ -111,7 +111,7 @@
 {%                         do avd_ext_nodes[peer_node]["neighbors"].append(avd_ext_node_neighbordict) %}
 {%                     endif %}
 {%                     set neighbordict = dict() %}
-{%                     do neighbordict.update({"neighborDevice": ifdata["peer"]}) %}
+{%                     do neighbordict.update({"neighborDevice": ifdata["peer"] | replace("_", "-")}) %}
 {%                     do neighbordict.update({"neighborPort": ifdata["peer_interface"]}) %}
 {%                     do neighbordict.update({"port": ifdata.name}) %}
 {%                     do node_dict[nodename]["neighbors"].append(neighbordict) %}

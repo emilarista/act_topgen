@@ -35,7 +35,7 @@ act_add_connected_nodes: false
 # the ACT node_type needs to be defined
 # Any peer_type that is not defined in this list
 # will not be added as a node in the topology
-act_connected_nodes_map: 
+act_connected_nodes_map:
   other: 'veos'
   # server: 'generic'
   # network_port: 'generic'
@@ -45,3 +45,5 @@ act_connected_nodes_range: 192.168.0.128/25
 
 # # Extra nodes to add
 # act_additional_nodes: []
+
+act_use_old_connections: false

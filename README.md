@@ -12,8 +12,8 @@ Use the same top level group you have for your fabric for hosts, modify the inpu
 
 ```yaml
 ---
-- name: Build Switch configuration
-  hosts: MPLS_FABRIC
+- name: Build ACT Topology
+  hosts: ACT_FABRIC
   connection: local
   gather_facts: false
 
@@ -67,4 +67,7 @@ act_connected_nodes_map:
 
 # Range for assigning OOB IP addresses to connected nodes.
 act_connected_nodes_range: 192.168.0.128/25
+
+# Use older style ACT topology connections (nodes[].neighbors)
+act_use_old_connections: false
 ```

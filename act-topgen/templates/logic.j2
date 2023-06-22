@@ -34,7 +34,7 @@
 {%             elif mgmt_network.network | ansible.utils.network_in_usable(node_mgmt_ip) %}
 {%                 do node_dict[nodename].update({"ip_addr": node_mgmt_ip}) %}
 {%             else %}
-{%                 include "ip_errors.j2" %}
+{{                 notdefined | mandatory("Error: Your veos nodes have inconsistent mgmt IP addressing.")}}
 {%             endif %}
 {%             break %}
 {%         endfor %}

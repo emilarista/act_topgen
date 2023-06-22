@@ -1,26 +1,12 @@
-!!!!!!!!!!!!!!!!!!!!!! WARNING! !!!!!!!!!!!!!!!!!!!!!!!
-Found inconsistent mgmt ip addressing in your topology!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {% if act_add_cvp and not (mgmt_network.network | ansible.utils.network_in_usable(act_cvp_ip)) %}
-You have chosen to add a cvp node with an inconsistent IP address compared to your veos nodes.
-act_cvp_ip: {{ act_cvp_ip }}
-mgmt_network: {{ mgmt_network.network }} # discovered from parsing eos nodes structured configs
-
-{% endif %}
+{{     notdefined | mandatory("You have chosen to add a cvp node with an inconsistent IP address compared to your veos nodes.") }}
+{% endif  %}
 {% if act_add_connected_nodes and not ( mgmt_network.network | ansible.utils.network_in_network(act_connected_nodes_range)) %}
-You have chosen to add connected nodes with inconsistent IP addressing compared to your veos nodes.
-act_connected_nodes_range: {{ act_connected_nodes_range }}
-mgmt_network: {{ mgmt_network.network }} # discovered from parsing eos nodes structured configs
-
+{{     notdefined | mandatory("You have chosen to add connected nodes with inconsistent IP addressing compared to your veos nodes.") }}
 {% endif %}
 {% if act_add_ansible_node and not (mgmt_network.network | ansible.utils.network_in_usable(act_ansible_ip)) %}
-You have chosen to add an ansible node with inconsistent IP addressing compared to your veos nodes.
-act_ansible_ip: {{ act_ansible_ip }}
-mgmt_network: {{ mgmt_network.network }} # discovered from parsing eos nodes structured configs
-
+{{     notdefined | mandatory("You have chosen to add an ansible node with inconsistent IP addressing compared to your veos nodes.") }}
 {% endif %}
 
-Please ensure that all your veos nodes have mgmt ip addresses from the same subnet compared each
-other and to act instances of cvp, connected nodes, ansible nodes!
 
 

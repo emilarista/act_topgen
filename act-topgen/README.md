@@ -30,6 +30,7 @@ Use the same top level group you have for your fabric for hosts, modify the inpu
 structured_folder: "intended/structured_configs/"
 avd_structured_config_file_format: yml
 output_folder: "act/"
+output_filename: "topology.yml"
 
 # Versions
 act_eos_version: "4.28.1.1F"

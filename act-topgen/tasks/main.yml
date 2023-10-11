@@ -23,5 +23,5 @@
   run_once: true
   template:
     src: main.j2
-    dest: "{{ output_folder }}/topology.yml"
+    dest: "{{ output_folder }}/{{ output_filename }}"
     mode: 0664

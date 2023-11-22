@@ -15,6 +15,9 @@ act_cvp_version: "2022.2.2"
 # Device (veos/generic) user/pass
 act_device_user: "cvpadmin"
 act_device_password: "arista1234"
+# List other ports that all EOS devices should have.
+# These cannot clash with ports already defined through the topology.
+act_default_ports: []
 
 # CVP user/pass
 act_cvp_user: "root"

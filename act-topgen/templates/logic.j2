@@ -56,7 +56,7 @@
 {%                         if act_add_connected_nodes == true and ifdata["peer_type"] in act_connected_nodes_map %}
 {%                             set peer_node = ifdata["peer"] | replace("_", "-") %}
 {%                             set avd_ext_node_neighbordict = dict() %}
-{%                             if peer_node not in avd_ext_nodes %}
+{%                             if peer_node not in avd_ext_nodes and peer_node not in ansible_play_hosts_all %}
 {%                                 do avd_ext_nodes.update({peer_node: dict()}) %}
 {%                                 set mgmt_ip = act_connected_nodes_range | ansible.utils.ipaddr('network') | ansible.utils.ipmath(ns.avd_ext_nodes_count)  %}
 {%                                 set ns.avd_ext_nodes_count = ns.avd_ext_nodes_count + 1 %}
@@ -98,7 +98,7 @@
 {%                     do avd_ext_node_neighbordict.update({"neighborDevice": nodename}) %}
 {%                     do avd_ext_node_neighbordict.update({"neighborPort": ifdata.name}) %}
 {%                     do avd_ext_node_neighbordict.update({"port": ifdata["peer_interface"]}) %}
-{%                     if peer_node not in avd_ext_nodes %}
+{%                     if peer_node not in avd_ext_nodes and peer_node not in ansible_play_hosts_all %}
 {%                         do avd_ext_nodes.update({peer_node: dict()}) %}
 {%                         set mgmt_ip = act_connected_nodes_range | ansible.utils.ipaddr('network') | ansible.utils.ipmath(ns.avd_ext_nodes_count)  %}
 {%                         set ns.avd_ext_nodes_count = ns.avd_ext_nodes_count + 1 %}

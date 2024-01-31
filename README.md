@@ -75,3 +75,11 @@ act_connected_nodes_range: 192.168.0.128/25
 # Use older style ACT topology connections (nodes[].neighbors)
 act_use_old_connections: false
 ```
+
+## Inventory Update Script
+
+Attached in this repo is also a script 'update-inv.py' that updates an ansible inventory based on the information in a downloaded ACT inventory file. This is useful as ACT generates randomized IP addresses for all nodes, and manually updating your ansible inventory after the lab is deployed is a total pain in the behind.
+
+Usage:
+
+python update-inv.py -i < path/to/ansible-inventory-to-update > -a < path/to/downloaded/act-inventory-file >

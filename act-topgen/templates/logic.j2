@@ -124,7 +124,7 @@
 {%         endfor %}
 {%         do nodes_list.append(node_dict) %}
 {#      Add default ports to the node #}
-{%         do node_dict[node].ports.extend(act_default_ports) %}
+{%         do node_dict[nodename].ports.extend(act_default_ports) %}
 {%     endif %}
 {% endfor %}
 {# Add the other nodes to the list #}

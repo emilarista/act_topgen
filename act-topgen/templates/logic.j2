@@ -19,11 +19,16 @@
 {%         elif hostvars[node].management_interfaces is defined %}
 {%             set node_mgmt_interfaces = hostvars[node].management_interfaces %}
 {%         endif %}
-{%         for mgmt_if in node_mgmt_interfaces %}
-{%             set node_mgmt_ip = mgmt_if.ip_address | split("/") %}
-{%             do node_dict[nodename].update({"ip_addr": node_mgmt_ip[0]}) %}
-{%             break %}
-{%         endfor %}
+{%         if node_mgmt_interfaces | length > 0 %}
+{%             for mgmt_if in node_mgmt_interfaces %}
+{%                 set node_mgmt_ip = mgmt_if.ip_address | split("/") %}
+{%                 do node_dict[nodename].update({"ip_addr": node_mgmt_ip[0]}) %}
+{%                 break %}
+{%             endfor %}
+{%         else %}
+{%             set node_mgmt_ip = eos_devices_mgmt_ip_range | ansible.utils.ipaddr('network') | ansible.utils.ipmath(10 + loop.index0) %}
+{%             do node_dict[nodename].update({"ip_addr": node_mgmt_ip}) %}
+{%         endif %}
 {%         do node_dict[nodename].update({"node_type": "veos"}) %}
 {%         if act_use_old_connections %}
 {%             do node_dict[nodename].update({"neighbors": []}) %}

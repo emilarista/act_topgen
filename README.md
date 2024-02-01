@@ -20,7 +20,7 @@ Use the same top level group you have for your fabric for hosts, modify the inpu
   tasks:
     - name: Generate ACT Topology File
       import_role:
-        name: act-topgen
+        name: act_topgen
 ```
 
 ## Role Defaults

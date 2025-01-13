@@ -39,6 +39,15 @@
 {%         else %}
 {%             set node_ethernet_interfaces = hostvars[node].ethernet_interfaces %}
 {%         endif %}
+{%         if act_use_device_models is true %}
+{%             if hostvars[node].metadata is defined %}
+{%                 if hostvars[node].metadata.platform is defined and hostvars[node].metadata.platform is not none %}
+{%                     if hostvars[node].metadata.platform | lower is not in ["veos-lab", "veos_lab", "veos", "ceos-lab", "ceos_lab", "ceos"] %}
+{%                         do node_dict[nodename].update({"device_model": hostvars[node].metadata.platform }) %}
+{%                     endif %}
+{%                 endif %}
+{%             endif %}
+{%         endif %}
 {#         building links definition as per new ACT standard #}
 {%         if not act_use_old_connections %}
 {%             for ifdata in node_ethernet_interfaces %}

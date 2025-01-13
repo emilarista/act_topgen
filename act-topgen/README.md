@@ -43,6 +43,8 @@ act_device_password: "arista1234"
 # List other ports that all EOS devices should have.
 # These cannot clash with ports already defined through the topology.
 act_default_ports: []
+# Adds device models from structured config metadata if present
+act_use_device_models: true
 
 # CVP user/pass
 act_cvp_user: "root"

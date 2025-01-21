@@ -81,7 +81,7 @@ act_connected_nodes_map:
 act_connected_nodes_range: 192.168.0.128/25
 
 # # Extra nodes to add
-# act_additional_nodes: []
+act_additional_nodes: []
 
 # Use older style ACT topology connections (nodes[].neighbors)
 act_use_old_connections: false

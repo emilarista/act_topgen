@@ -145,6 +145,12 @@
 {% for node in avd_ext_nodes %}
 {%     do nodes_list.append({ node: avd_ext_nodes[node] }) %}
 {% endfor %}
+{% for node in act_additional_nodes %}
+{%     do nodes_list.append(node) %}
+{% endfor %}
+{% for link in act_additional_links %}
+{%     do act_links.append(link) %}
+{% endfor %}
 {% if act_add_cvp and act_cvp_auto_configuration %}
 {%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration, "instance_type": act_cvp_size }}) %}
 {% elif act_add_cvp %}

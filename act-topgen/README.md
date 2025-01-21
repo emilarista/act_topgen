@@ -26,6 +26,7 @@ Use the same top level group you have for your fabric for hosts, modify the inpu
 ## Role Defaults
 
 ```yaml
+---
 # defaults file for act-topgen
 
 # Input/Output directories and AVD structured config file format
@@ -49,14 +50,16 @@ act_default_ports: []
 # Adds device models from structured config metadata if present
 act_use_device_models: true
 
-# CVP user/pass
+# Extra node parameters
 act_cvp_user: "root"
 act_cvp_password: "cvproot"
 act_cvp_instance_type: "singlenode"  # Currently the only supported type
 act_cvp_ip: "192.168.0.5"
-act_tools_server_ip: "192.168.0.6"
-# Whether to indicate to ACT to automatically configure CVP
 act_cvp_auto_configuration: true
+act_cvp_size: medium # supported values are medium, large, xlarge
+act_tools_server_ip: "192.168.0.6"
+act_tools_server_size: medium # supported values are medium, large, xlarge
+act_veos_size: medium # supported values are medium, large, xlarge
 
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true

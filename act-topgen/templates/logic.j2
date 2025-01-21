@@ -29,6 +29,11 @@
 {%             do node_dict[nodename].update({"neighbors": []}) %}
 {%         endif %}
 {%         do node_dict[nodename].update({"ports": []}) %}
+{%         if hostvars[node].act_veos_size is defined and hostvars[node].act_veos_size is not none %}
+{%             do node_dict[nodename].update({"instance_type": hostvars[node].act_veos_size}) %}
+{%         else %}
+{%             do node_dict[nodename].update({"instance_type": act_veos_size}) %}
+{%         endif %}
 {%         set node_ethernet_interfaces = [] %}
 {#         version 3 of avd uses dict of dicts for interfaces #}
 {%         if hostvars[node].ethernet_interfaces is defined and hostvars[node].ethernet_interfaces is mapping %}
@@ -141,12 +146,12 @@
 {%     do nodes_list.append({ node: avd_ext_nodes[node] }) %}
 {% endfor %}
 {% if act_add_cvp and act_cvp_auto_configuration %}
-{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration }}) %}
+{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "auto_configuration": act_cvp_auto_configuration, "instance_type": act_cvp_size }}) %}
 {% elif act_add_cvp %}
-{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp" }}) %}
+{%     do nodes_list.append({ "cvp": {"ip_addr": act_cvp_ip, "node_type": "cvp", "instance_type": act_cvp_size }}) %}
 {% endif %}
 {% if act_add_tools_server %}
-{%     do nodes_list.append({"tools-server": {"ip_addr": act_tools_server_ip, "node_type": "tools-server"}}) %}
+{%     do nodes_list.append({"tools-server": {"ip_addr": act_tools_server_ip, "node_type": "tools-server", "instance_type": act_tools_server_size}}) %}
 {% endif %}
 {% set nodes_data.nodes = {"nodes": nodes_list} %}
 {# Build nodes_data.node_defaults #}

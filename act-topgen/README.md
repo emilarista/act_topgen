@@ -26,6 +26,8 @@ Use the same top level group you have for your fabric for hosts, modify the inpu
 ## Role Defaults
 
 ```yaml
+# defaults file for act-topgen
+
 # Input/Output directories and AVD structured config file format
 structured_folder: "intended/structured_configs/"
 avd_structured_config_file_format: yml
@@ -33,9 +35,10 @@ output_folder: "act/"
 output_filename: "topology.yml"
 
 # Versions
-act_eos_version: "4.28.1.1F"
+act_eos_version: "4.30.4M"
 act_generic_os_version: "Rocky-8.5"
-act_cvp_version: "2022.2.2"
+act_tools_os_version: "ubuntu-2204-lts"
+act_cvp_version: "2023.1.3"
 
 # Device (veos/generic) user/pass
 act_device_user: "cvpadmin"
@@ -49,14 +52,15 @@ act_use_device_models: true
 # CVP user/pass
 act_cvp_user: "root"
 act_cvp_password: "cvproot"
-act_cvp_instance_type: "singlenode" # Currently the only supported type
-act_cvp_ip: < cvp node IP, default -> 192.168.0.5 >
-act_ansible_ip: < cvp node IP, default -> 192.168.0.6 >
-act_cvp_auto_configuration: < true, false , default -> true>
+act_cvp_instance_type: "singlenode"  # Currently the only supported type
+act_cvp_ip: "192.168.0.5"
+act_tools_server_ip: "192.168.0.6"
+# Whether to indicate to ACT to automatically configure CVP
+act_cvp_auto_configuration: true
 
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true
-act_add_ansible_node: true
+act_add_tools_server: true
 
 # Whether to add nodes that are not defined in the fabric
 # Example l3 peers, servers and other endpoints
@@ -71,8 +75,10 @@ act_connected_nodes_map:
   # network_port: 'generic'
   # <peer_type in AVD>: <node_type in ACT>
 
-# Range for assigning OOB IP addresses to connected nodes.
 act_connected_nodes_range: 192.168.0.128/25
+
+# # Extra nodes to add
+# act_additional_nodes: []
 
 # Use older style ACT topology connections (nodes[].neighbors)
 act_use_old_connections: false

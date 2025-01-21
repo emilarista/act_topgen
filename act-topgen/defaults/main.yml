@@ -10,6 +10,7 @@ output_filename: "topology.yml"
 # Versions
 act_eos_version: "4.30.4M"
 act_generic_os_version: "Rocky-8.5"
+act_tools_os_version: "ubuntu-2204-lts"
 act_cvp_version: "2023.1.3"
 
 # Device (veos/generic) user/pass
@@ -26,13 +27,13 @@ act_cvp_user: "root"
 act_cvp_password: "cvproot"
 act_cvp_instance_type: "singlenode"  # Currently the only supported type
 act_cvp_ip: "192.168.0.5"
-act_ansible_ip: "192.168.0.6"
+act_tools_server_ip: "192.168.0.6"
 # Whether to indicate to ACT to automatically configure CVP
 act_cvp_auto_configuration: true
 
 # Whether to add cvp and ansible node to topology
 act_add_cvp: true
-act_add_ansible_node: true
+act_add_tools_server: true
 
 # Whether to add nodes that are not defined in the fabric
 # Example l3 peers, servers and other endpoints

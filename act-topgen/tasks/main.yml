@@ -1,0 +1,27 @@
+---
+# tasks file for act-topgen
+- name: Create required output directories if not present
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+  loop:
+    - "{{ output_folder }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Include device structured configuration variables
+  include_vars: "{{ filename }}"
+  delegate_to: localhost
+  vars:
+    filename: "{{ structured_folder }}/{{ inventory_hostname }}.{{ avd_structured_config_file_format }}"
+  tags:
+    - always
+
+- name: Build topology
+  delegate_to: localhost
+  run_once: true
+  template:
+    src: main.j2
+    dest: "{{ output_folder }}/{{ output_filename }}"
+    mode: 0664

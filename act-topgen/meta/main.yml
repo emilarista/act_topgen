@@ -1,7 +1,8 @@
 galaxy_info:
-  author: your name
-  description: your role description
-  company: your company (optional)
+  author: emilarista
+
+  description: CE ACT Topology Generation
+  company: Arista
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -16,7 +17,7 @@ galaxy_info:
   # - CC-BY-4.0
   license: license (GPL-2.0-or-later, MIT, etc)
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:

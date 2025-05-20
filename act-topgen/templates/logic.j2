@@ -35,7 +35,7 @@
 {%             do node_dict[nodename].update({"instance_type": act_veos_size}) %}
 {%         endif %}
 {#         check if internet enabled for veos#}
-{%         if act_internet_veos and node_dict[nodename]["node_type"] == "veos" %}
+{%         if act_veos_internet_access and node_dict[nodename]["node_type"] == "veos" %}
 {%           do node_dict[nodename].update({"internet_access": true}) %}
 {%         endif %}
 {%         set node_ethernet_interfaces = [] %}

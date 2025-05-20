@@ -87,7 +87,7 @@ act_connected_nodes_range: 192.168.0.128/25
 act_use_old_connections: false
 
 # internet for veos devices
-act_internet_veos: false
+act_veos_internet_access: false
 ```
 
 ## Inventory Update Script

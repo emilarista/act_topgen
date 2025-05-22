@@ -34,6 +34,10 @@
 {%         else %}
 {%             do node_dict[nodename].update({"instance_type": act_veos_size}) %}
 {%         endif %}
+{#         check if internet enabled for veos#}
+{%         if act_veos_internet_access and node_dict[nodename]["node_type"] == "veos" %}
+{%           do node_dict[nodename].update({"internet_access": true}) %}
+{%         endif %}
 {%         set node_ethernet_interfaces = [] %}
 {#         version 3 of avd uses dict of dicts for interfaces #}
 {%         if hostvars[node].ethernet_interfaces is defined and hostvars[node].ethernet_interfaces is mapping %}
